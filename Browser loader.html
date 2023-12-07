@@ -1,0 +1,1036 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DA GAME</title>
+</head>
+
+<body>
+
+    <script src="https://koda.nu/simple.js">
+
+        //DONE
+        //WHILE LOOP
+        //POTS
+        //WHEN ROOM HIDE 1 REVEAL BOSS/2 ROOM AND OPEN THE DOOR
+        //BOSS ROOM 
+        //BREAKABLE WALL
+
+        //TODO
+
+
+        var world = { x: 0, y: -100 };
+        const worldOrg = { x: 0, y: 0 };
+
+        var playerSpeed = 7;
+        const playerSpeedOrg = 5;
+        var dead = false;
+        var isHoldingSword = false;
+
+        var player = { x: totalWidth / 2 - 20, y: totalHeight / 2 - 20, w: 40, h: 40 };
+        var playerStop = { up: false, down: false, left: false, right: false, };
+        var swordInHand = { x: totalWidth / 2 + 20, y: totalHeight / 2 - 30, w: 10, h: 40, graph: "https://i.ibb.co/b27QSwJ/Sword-Right.png" }
+        var swordDirection = 0;
+        var swordLock = false;
+
+        var playerType = "https://i.ibb.co/XDyqpwX/Player-Right-Still.png"
+        var playerMoving = false;
+        var playerMovingCounter = 0;
+
+
+        //WORLD VARS
+
+        //start walls
+        var wall1 = { x: 300, y: 300, w: 20, h: 500 };
+        var wall2 = { x: 300, y: 300, w: 920, h: 20 };
+        var wall3 = { x: 300, y: 800, w: 920, h: 20 };
+        var door1 = { x: 1200, y: 320, w: 20, h: 480 };
+        var wallHider = { x: 280, y: 300, w: 20, h: 520 };
+
+        //B room walls
+        var wallBreak1 = 0;
+        var breakLock = false;
+
+        var wallB1 = { x: 1200, y: 20, w: 20, h: 300 };
+        var wallB2 = { x: 1200, y: 820, w: 20, h: 300 };
+        var wallB3 = { x: 1200, y: 1120, w: 600, h: 20 };
+        var wallB4 = { x: 1200, y: 20, w: 600, h: 20 };
+
+        var potList = [];
+        var potAmount = 0;
+
+        var wallB12 = { x: 1780, y: 40, w: 20, h: 300 };
+        var wallB22 = { x: 1780, y: 820, w: 20, h: 300 };
+        var wallB32 = { x: 1780, y: 320, w: 900, h: 20 };
+        var wallB42 = { x: 1780, y: 820, w: 900, h: 20 };
+        var wallHider1 = { x: 1200, y: -460, w: 20, h: 480 };
+
+        var doorB1 = { x: 2080, y: 840, w: 20, h: 480 };
+        var wallHider3 = { x: 2080, y: 840, w: 20, h: 480 };
+        var doorTrigger = { x: 2580, y: 360, w: 40, h: 480 };
+        var doorTriggervar = false;
+        var moveDoorB1 = false;
+        var roomHider1 = { x: 0, y: 0, w: 2080, h: 2000 };
+        var hideRoom1 = false;
+
+        // HIDDEN ROOM
+        var wallH1 = { x: 1780, y: 20, w: 300, h: 20 };
+        var wallH2 = { x: 1780, y: 300, w: 300, h: 20 };
+        var wallH3 = { x: 2060, y: 20, w: 20, h: 300 };
+        var wallH4 = { x: 1780, y: 305, w: 20, h: 30 };
+        var wallHider2 = { x: 1800, y: 20, w: 300, h: 300 }
+
+        var secretPickup = { x: 1915, y: 160, w: 20, h: 20 }
+
+        var wallHider2 = { x: 1800, y: 20, w: 300, h: 300 }
+
+
+        // BOSS ROOM
+        var hideRoom2 = true;
+        var moveDoorBoss1 = false;
+
+        var doorBoss1 = { x: 2660, y: 340, w: 20, h: 480 };
+        var wallHiderBoss1 = { x: 2660, y: 840, w: 20, h: 480 };
+
+        var wallBoss1 = { x: 3260, y: 340, w: 20, h: 480 };
+        var wallBossBreakable = false;
+
+        var wallBoss2 = { x: 2680, y: 320, w: 600, h: 20 };
+        var wallBoss3 = { x: 2680, y: 820, w: 600, h: 20 };
+
+        var bossAttackHider1 = { x: 2080, y: 20, w: 1200, h: 320 };
+        var bossAttackHider2 = { x: 2080, y: 820, w: 1200, h: 320 };
+
+        //bossFight FUNCTION VARS
+        var bossFunctionLock = false;
+
+        var damageable = false;
+        var damageableCounter = 0;
+        var hitBossAmount = 0;
+        var attackDelay = 0;
+        var bossLives = 3;
+        var bossDead = false;
+
+
+        var attackChosen = 0;
+        var amoutOfAttacks = 0;
+
+        var callSpears1 = false;
+        var launchSpears1 = false;
+        var spears1Active = false;
+        var Aspear1 = { x: 2280, y: 240, w: 15, h: 100 }
+        var Aspear2 = { x: 2480, y: 240, w: 15, h: 100 }
+        var Aspear3 = { x: 2680, y: 240, w: 15, h: 100 }
+        var Aspear4 = { x: 2880, y: 240, w: 15, h: 100 }
+        var Aspear5 = { x: 2380, y: 820, w: 15, h: 100 }
+        var Aspear6 = { x: 2580, y: 820, w: 15, h: 100 }
+        var Aspear7 = { x: 2780, y: 820, w: 15, h: 100 }
+
+        var callSpears2 = false;
+        var launchSpears2 = false;
+        var spears2Active = false;
+        var Bspear1 = { x: 2080, y: 320, w: 20, h: 20 }
+        var Bspear2 = { x: 3050, y: 320, w: 20, h: 20 }
+        var Bspear3 = { x: 3050, y: 820, w: 20, h: 20 }
+        var Bspear4 = { x: 2080, y: 820, w: 20, h: 20 }
+
+        var callbreakFloor1 = false
+        var crackFloor1 = false; //
+        var crack1Active = false;
+        var crack1Count = 0;
+        var Acracking1 = { x: 2280, y: 520, w: 50, h: 50 }
+        var Acrack1 = Acracking1
+        var Acracking2 = { x: 2780, y: 430, w: 50, h: 50 }
+        var Acrack2 = Acracking2
+        var Acracking3 = { x: 2580, y: 620, w: 50, h: 50 }
+        var Acrack3 = Acracking3
+
+        var callbreakFloor2 = false
+        var crackFloor2 = false;
+        var crack2Active = false;
+        var crack2Count = 0;
+        var Bcracking1 = { x: 2180, y: 400, w: 50, h: 50 }
+        var Bcrack1 = Bcracking1
+        var Bcracking2 = { x: 2480, y: 510, w: 50, h: 50 }
+        var Bcrack2 = Bcracking2
+        var Bcracking3 = { x: 2780, y: 710, w: 50, h: 50 }
+        var Bcrack3 = Bcracking3
+
+        //END ROOM
+        var hideRoom3 = true;
+
+        var wallFin1 = { x: 3860, y: 340, w: 20, h: 480 };
+        var wallFin2 = { x: 3280, y: 320, w: 600, h: 20 };
+        var wallFin3 = { x: 3280, y: 820, w: 600, h: 20 };
+
+        var finItem = { x: 3560, y: 560, w: 40, h: 40 }
+
+
+
+        //spear/sword pickup
+        var spearPickup = { x: 1500, y: 550, w: 15, h: 40, press: "green" };
+
+
+        //buttons
+        var button1 = { x: 1100, y: 450, w: 40, h: 40, press: "https://i.ibb.co/9YhMM5T/Button2.png" };
+        var button2 = { x: 1100, y: 550, w: 40, h: 40, press: "https://i.ibb.co/cyqQ87x/Button1.png" };
+        var button3 = { x: 1100, y: 650, w: 40, h: 40, press: "https://i.ibb.co/mH38TwP/Button3.png" };
+        var buttonCombo = { a: false, b: false, c: false };
+        var buttonLock = { a: false, b: false, c: false };
+        var door1Acc = 0;
+        var wallMove = true;
+
+        while (potAmount < 5) {
+            potList.push({ x: random(1230, 1750), y: random(300, 60), w: 30, h: 30, graph: "https://i.ibb.co/HCZj1jF/Pot.png" });
+            potAmount += 1;
+        }
+
+
+        var rollCreditsBitch = false;
+        var creditsY = 0;
+
+        //BOSS-MAN
+
+        var bashAcc = 1;
+        var bashSpeed = 0;
+
+        var bossBaseCharacter = { x: 3100, y: 530, w: 100, h: 100 };
+        var sheildBashTrigger = { x: 3050, y: 340, w: 200, h: 480 };
+        var isBashing = false;
+
+
+
+        function isColliding(box1, box2) {
+            return box1.x < box2.x + box2.w + world.x &&
+                box1.x + box1.w > box2.x + world.x &&
+                box1.y < box2.y + box2.h + world.y &&
+                box1.y + box1.h > box2.y + world.y;
+        }
+
+        function isHitting(box1, box2) {
+            return box1.x + swordDirection < box2.x + box2.w + world.x &&
+                box1.x + swordDirection + box1.w > box2.x + world.x &&
+                box1.y < box2.y + box2.h + world.y &&
+                box1.y + box1.h > box2.y + world.y;
+        }
+
+        function breakLockReset() {
+            breakLock = false;
+        }
+
+        function deathScreen() {
+            rectangle(0, 0, totalWidth, totalHeight, "#00ff00")
+            text(totalWidth / 2 - 330, totalHeight / 2 - 100, 100, "YOU DIED", "black")
+            text(totalWidth / 2 - 180, totalHeight / 2, 25, "Press f5 to reset", "black")
+        }
+
+        function spearClose() {
+            text(totalWidth / 2 - 200, totalHeight / 2 - 50, 30, "Press F to Pickup", "#00ff00");
+            if (keyboard.f) {
+                spearPickupFunc();
+            }
+        }
+
+        function spearPickupFunc() {
+            spearPickup.x = 10000;
+            isHoldingSword = true;
+            swordHelpText();
+            //change player model to spear model and enable a function that enables ------------------------------------
+        }
+
+        function swordReset() {
+            swordInHand.y = totalHeight / 2 - 30;
+            swordInHand.w = 10;
+            swordInHand.h = 40;
+            setTimeout(swordUnlocker, 50)
+            if (swordDirection === -50) {
+                swordInHand.x = totalWidth / 2 + 20;
+            }
+        }
+
+        function swordUnlocker() {
+            swordLock = false;
+        }
+
+        var swordhelpvar = 0;
+        var showhelp = false;
+        function swordHelpText() {
+            if (swordhelpvar < 1) {
+                swordhelpvar = 2
+                showhelp = true;
+                setTimeout(swordHelpText, 5000)
+            } else {
+                showhelp = false;
+            }
+        }
+
+        function triggerAttack() {
+            attackChosen = random(1, 2)
+            if (attackChosen === 1) {
+                callSpears1 = true;
+                amoutOfAttacks += 1;
+            }
+            if (attackChosen === 2) {
+                callSpears2 = true;
+                attackChosen = 0;
+                amoutOfAttacks += 1;
+            }
+            if (amoutOfAttacks === 3) {
+                callbreakFloor1 = true;
+            }
+            if (bossLives === 2) {
+                callbreakFloor2 = true;
+            }
+        }
+
+
+
+        function bossFight() {
+            if (!bossDead) {
+                if (bossLives === 0) {
+                    bossDead = true;
+                    return;
+                }
+                if (amoutOfAttacks === 0) {
+                    triggerAttack();
+                    setTimeout(bossFight, 3600)
+                    return;
+                }
+                if (amoutOfAttacks === 1) {
+                    triggerAttack();
+                    setTimeout(bossFight, 3600)
+                    return;
+                }
+                if (amoutOfAttacks === 2) {
+                    triggerAttack();
+                    setTimeout(bossFight, 3600)
+                    return;
+                }
+                if (amoutOfAttacks === 3 && damageableCounter < 101) {
+                    damageable = true;
+                    setTimeout(bossFight, 3600)
+                }
+                if (hitBossAmount === 1) {
+                    damageable = false;
+                    damageableCounter = 0;
+                    amoutOfAttacks = 0;
+                    bossLives -= 1;
+                    hitBossAmount = 0
+                    setTimeout(bossFight, 100)
+                    return;
+
+                }
+
+            }
+        }
+
+
+        //ATTACKS
+        //2080 - 3260
+        function spears1() {
+            if (spears1Active) {
+                picture(Aspear1.x + world.x, Aspear1.y + world.y, "https://i.ibb.co/fNfs4px/SpearTop.png", Aspear1.w, Aspear1.h)
+                picture(Aspear2.x + world.x, Aspear2.y + world.y, "https://i.ibb.co/fNfs4px/SpearTop.png", Aspear2.w, Aspear2.h)
+                picture(Aspear3.x + world.x, Aspear3.y + world.y, "https://i.ibb.co/fNfs4px/SpearTop.png", Aspear3.w, Aspear3.h)
+                picture(Aspear4.x + world.x, Aspear4.y + world.y, "https://i.ibb.co/fNfs4px/SpearTop.png", Aspear4.w, Aspear4.h)
+                picture(Aspear5.x + world.x, Aspear5.y + world.y, "https://i.ibb.co/cgSQSLR/Spear.png", Aspear5.w, Aspear5.h)
+                picture(Aspear6.x + world.x, Aspear6.y + world.y, "https://i.ibb.co/cgSQSLR/Spear.png", Aspear6.w, Aspear6.h)
+                picture(Aspear7.x + world.x, Aspear7.y + world.y, "https://i.ibb.co/cgSQSLR/Spear.png", Aspear7.w, Aspear7.h)
+
+                if (launchSpears1) {
+                    Aspear1.y += 20;
+                    Aspear2.y += 20;
+                    Aspear3.y += 20;
+                    Aspear4.y += 20;
+                    Aspear5.y -= 20;
+                    Aspear6.y -= 20;
+                    Aspear7.y -= 20;
+                }
+                if (Aspear1.y < 260 && !launchSpears1) {
+                    Aspear1.y += 0.3;
+                    Aspear2.y += 0.3;
+                    Aspear3.y += 0.3;
+                    Aspear4.y += 0.3;
+                    Aspear5.y -= 0.3;
+                    Aspear6.y -= 0.3;
+                    Aspear7.y -= 0.3;
+                } else if (Aspear1.y >= 260 && !launchSpears1) {
+                    launchSpears1 = true
+                }
+
+                if (Aspear1.y > 1000) {
+                    spears1Active = false;
+                    launchSpears1 = false;
+                    spears1Active = false;
+                    Aspear1.y = 240;
+                    Aspear2.y = 240;
+                    Aspear3.y = 240;
+                    Aspear4.y = 240;
+                    Aspear5.y = 820;
+                    Aspear6.y = 820;
+                    Aspear7.y = 820;
+                }
+            }
+        }
+
+        function spears2() {
+            if (spears2Active) {
+                picture(Bspear1.x + world.x, Bspear1.y + world.y, "https://i.ibb.co/Bt5C1Ft/Rock.png", Bspear1.w, Bspear1.h)
+                picture(Bspear2.x + world.x, Bspear2.y + world.y, "https://i.ibb.co/Bt5C1Ft/Rock.png", Bspear2.w, Bspear2.h)
+                picture(Bspear3.x + world.x, Bspear3.y + world.y, "https://i.ibb.co/Bt5C1Ft/Rock.png", Bspear3.w, Bspear3.h)
+                picture(Bspear4.x + world.x, Bspear4.y + world.y, "https://i.ibb.co/Bt5C1Ft/Rock.png", Bspear4.w, Bspear4.h)
+
+                if (launchSpears2) {
+                    Bspear1.y += 20;
+                    Bspear1.x += 20;
+                    Bspear2.y += 20;
+                    Bspear2.x -= 20;
+                    Bspear3.y -= 20;
+                    Bspear3.x -= 20;
+                    Bspear4.y -= 20;
+                    Bspear4.x += 20;
+                }
+                if (Bspear1.y < 340 && !launchSpears2) {
+                    Bspear1.y += 0.3;
+                    Bspear1.x += 0.3;
+                    Bspear2.y += 0.3;
+                    Bspear2.x -= 0.3;
+                    Bspear3.y -= 0.3;
+                    Bspear3.x -= 0.3;
+                    Bspear4.y -= 0.3;
+                    Bspear4.x += 0.3;
+
+                } else if (Bspear2.y >= 260 && !launchSpears2) {
+                    launchSpears2 = true
+                }
+
+                if (Bspear1.y > 1000) {
+                    spears2Active = false;
+                    launchSpears2 = false;
+                    spears2Active = false;
+                    Bspear1.y = 320;
+                    Bspear1.x = 2080;
+                    Bspear2.y = 320;
+                    Bspear2.x = 3050;
+                    Bspear3.y = 820;
+                    Bspear3.x = 3050;
+                    Bspear4.y = 820;
+                    Bspear4.x = 2080;
+                }
+            }
+        }
+
+        function breakFloor1() {
+            if (crack1Active) {
+                if (!crackFloor1) {
+                    picture(Acracking1.x + world.x, Acracking1.y + world.y,"https://i.ibb.co/PT2Q6ZR/Spike-Hidden.png", Acracking1.w, Acracking1.h)
+                    picture(Acracking2.x + world.x, Acracking2.y + world.y,"https://i.ibb.co/PT2Q6ZR/Spike-Hidden.png", Acracking2.w, Acracking2.h)
+                    picture(Acracking3.x + world.x, Acracking3.y + world.y,"https://i.ibb.co/PT2Q6ZR/Spike-Hidden.png", Acracking3.w, Acracking3.h)
+                    crack1Count += 1;
+                } else {
+                    picture(Acrack1.x + world.x, Acrack1.y + world.y, "https://i.ibb.co/8MPDLDf/Spike.png", Acrack1.w, Acrack1.h,)
+                    picture(Acrack2.x + world.x, Acrack2.y + world.y, "https://i.ibb.co/8MPDLDf/Spike.png", Acrack2.w, Acrack2.h,)
+                    picture(Acrack3.x + world.x, Acrack3.y + world.y, "https://i.ibb.co/8MPDLDf/Spike.png", Acrack3.w, Acrack3.h,)
+                }
+                if (crack1Count > 50) {
+                    crackFloor1 = true;
+                }
+
+            }
+        }
+
+        function breakFloor2() {
+            if (crack2Active) {
+                if (!crackFloor2) {
+                    picture(Bcracking1.x + world.x, Bcracking1.y + world.y,"https://i.ibb.co/PT2Q6ZR/Spike-Hidden.png", Bcracking1.w, Bcracking1.h)
+                    picture(Bcracking2.x + world.x, Bcracking2.y + world.y,"https://i.ibb.co/PT2Q6ZR/Spike-Hidden.png", Bcracking2.w, Bcracking2.h)
+                    picture(Bcracking3.x + world.x, Bcracking3.y + world.y,"https://i.ibb.co/PT2Q6ZR/Spike-Hidden.png", Bcracking3.w, Bcracking3.h)
+                    crack2Count += 1;
+                } else {
+                    picture(Bcrack1.x + world.x, Bcrack1.y + world.y, "https://i.ibb.co/8MPDLDf/Spike.png", Bcrack1.w, Bcrack1.h)
+                    picture(Bcrack2.x + world.x, Bcrack2.y + world.y, "https://i.ibb.co/8MPDLDf/Spike.png", Bcrack2.w, Bcrack2.h)
+                    picture(Bcrack3.x + world.x, Bcrack3.y + world.y, "https://i.ibb.co/8MPDLDf/Spike.png", Bcrack3.w, Bcrack3.h)
+                }
+                if (crack2Count > 50) {
+                    crackFloor2 = true;
+                }
+
+            }
+        }
+
+
+        function update() {
+            fill("black")
+
+            //COLLS
+
+            if (!hideRoom1) {
+                if (isColliding(player, wall1)) {
+                    playerStop.left = true;
+                    dead = true;
+                }
+                if (isColliding(player, wall2)) {
+                    playerStop.up = true;
+                }
+                if (isColliding(player, wall3)) {
+                    playerStop.down = true;
+                }
+                if (isColliding(player, door1)) {
+                    playerStop.right = true;
+                }
+
+
+                //B ROOM COLLS
+                if (isColliding(player, wallB1)) {
+                    playerStop.left = true;
+                }
+                if (isColliding(player, wallB2)) {
+                    playerStop.left = true;
+                }
+                if (isColliding(player, wallB3)) {
+                    playerStop.down = true;
+                }
+                if (isColliding(player, wallB4)) {
+                    playerStop.up = true;
+                }
+                if (isColliding(player, wallB12)) {
+                    playerStop.right = true;
+                }
+                if (isColliding(player, wallB22)) {
+                    playerStop.right = true;
+                }
+                if (isColliding(player, doorTrigger) && isHoldingSword) {
+                    doorTriggervar = true;
+                }
+
+
+
+                //HIDDEN ROOM
+                if (isColliding(player, wallH1)) {
+                    playerStop.up = true;
+                }
+                if (isColliding(player, wallH2)) {
+                    playerStop.down = true;
+                }
+                if (isColliding(player, wallH3)) {
+                    playerStop.right = true;
+                }
+                if (isColliding(player, wallH4)) {
+                    playerStop.right = true;
+                }
+                if (isColliding(player, secretPickup)) {
+                    playerSpeed = 10;
+                    secretPickup.y = -10000;
+                }
+            }
+
+            //CORRIDOR COLLS
+
+            if (isColliding(player, wallB32)) {
+                playerStop.up = true;
+            }
+            if (isColliding(player, wallB42)) {
+                playerStop.down = true;
+            }
+            if (isColliding(player, doorB1)) {
+                playerStop.left = true;
+            }
+            if (isColliding(player, doorBoss1)) {
+                playerStop.right = true;
+            }
+
+            if (!hideRoom2) {
+                if (isColliding(player, wallBoss1)) {
+                    playerStop.right = true;
+                }
+                if (isColliding(player, wallBoss2)) {
+                    playerStop.up = true;
+                }
+                if (isColliding(player, wallBoss3)) {
+                    playerStop.down = true;
+                }
+
+                //FIGHT LOGIC
+                if (isHitting(swordInHand, bossBaseCharacter) && keyboard.space && damageable) {
+                    hitBossAmount += 1;
+                    damageableCounter = 0;
+                    damageable = false;
+                }
+
+                if (isHitting(swordInHand, wallBoss1) && keyboard.space && wallBossBreakable) {
+                    wallBoss1.y = 10000;
+                }
+
+                if ((isColliding(player, sheildBashTrigger) && !damageable)) {
+                    isBashing = true;
+                } else {
+                    isBashing = false;
+                }
+                if (isBashing) {
+                    bashSpeed = 30;
+                } else if (bashSpeed > 0) {
+                    bashSpeed -= bashAcc;
+                }
+                world.x += bashSpeed;
+
+                if (callSpears1) {
+                    spears1Active = true;
+                    callSpears1 = false;
+                }
+                if (callSpears2) {
+                    spears2Active = true;
+                    callSpears2 = false;
+                }
+                if (callbreakFloor1) {
+                    crack1Active = true;
+                    callbreakFloor1 = false;
+                }
+                if (callbreakFloor2) {
+                    crack2Active = true;
+                    callbreakFloor2 = false;
+                }
+
+                if (isColliding(player, Aspear1)) {
+                    dead = true;
+                }
+                if (isColliding(player, Aspear2)) {
+                    dead = true;
+                }
+                if (isColliding(player, Aspear3)) {
+                    dead = true;
+                }
+                if (isColliding(player, Aspear4)) {
+                    dead = true;
+                }
+                if (isColliding(player, Aspear5)) {
+                    dead = true;
+                }
+                if (isColliding(player, Aspear6)) {
+                    dead = true;
+                }
+                if (isColliding(player, Aspear7)) {
+                    dead = true;
+                }
+
+                if (isColliding(player, Bspear1)) {
+                    dead = true;
+                }
+                if (isColliding(player, Bspear2)) {
+                    dead = true;
+                }
+                if (isColliding(player, Bspear3)) {
+                    dead = true;
+                }
+                if (isColliding(player, Bspear4)) {
+                    dead = true;
+                }
+
+                if (isColliding(player, Acrack1) && crackFloor1) {
+                    dead = true;
+                }
+                if (isColliding(player, Acrack2) && crackFloor1) {
+                    dead = true;
+                }
+                if (isColliding(player, Acrack3) && crackFloor1) {
+                    dead = true;
+                }
+
+                if (isColliding(player, Bcrack1) && crackFloor2) {
+                    dead = true;
+                }
+                if (isColliding(player, Bcrack2) && crackFloor2) {
+                    dead = true;
+                }
+                if (isColliding(player, Bcrack3) && crackFloor2) {
+                    dead = true;
+                }
+
+
+                //ATTACK FUNCTIONS
+                spears1();
+                spears2();
+                breakFloor1();
+                breakFloor2();
+                if (!bossFunctionLock) {
+                    bossFight();
+                    bossFunctionLock = true;
+                }
+
+            }
+
+            if (!hideRoom3) {
+                if (isColliding(player, wallFin1)) {
+                    playerStop.right = true;
+                }
+                if (isColliding(player, wallFin2)) {
+                    playerStop.up = true;
+                }
+                if (isColliding(player, wallFin3)) {
+                    playerStop.down = true;
+                }
+                if (isColliding(player, finItem)) {
+                    rollCreditsBitch = true;
+                }
+            }
+
+
+            //HIT COLLS
+
+            if (swordLock) {
+                if (isHitting(swordInHand, potList[0])) {
+                    potList[0].y = -10000;
+                }
+                if (isHitting(swordInHand, potList[1])) {
+                    potList[1].y = -10000;
+                }
+                if (isHitting(swordInHand, potList[2])) {
+                    potList[2].y = -10000;
+                }
+                if (isHitting(swordInHand, potList[3])) {
+                    potList[3].y = -10000;
+                }
+                if (isHitting(swordInHand, potList[4])) {
+                    potList[4].y = -10000;
+                }
+
+                //WALL BREAK HIT COLL
+                if (isHitting(swordInHand, wallB12) && !breakLock) {
+                    wallBreak1 += 1;
+                    breakLock = true;
+                    setTimeout(breakLockReset, 200)
+                }
+
+            }
+
+
+            //sword/spear pick-up
+            if (isColliding(player, spearPickup)) {
+                spearClose();
+            }
+
+
+            //button press
+            if (isColliding(player, button1)) {
+                button1.press = "https://i.ibb.co/VgyQSPp/Button-Pressed.png";
+                buttonCombo.a = true;
+            }
+            if (isColliding(player, button2)) {
+                button2.press = "https://i.ibb.co/VgyQSPp/Button-Pressed.png";
+                buttonCombo.b = true;
+            }
+            if (isColliding(player, button3)) {
+                button3.press = "https://i.ibb.co/VgyQSPp/Button-Pressed.png";
+                buttonCombo.c = true;
+            }
+
+            if (buttonCombo.b === true && buttonCombo.a === false && buttonCombo.c === false) {
+                buttonLock.a = true;
+            }
+
+            if (buttonCombo.b === true && buttonCombo.a === true && buttonCombo.c === false) {
+                buttonLock.b = true;
+            }
+
+            if (buttonCombo.b === true && buttonCombo.a === true && buttonCombo.c === true) {
+                buttonLock.c = true;
+            }
+
+            if (buttonCombo.b === true && buttonCombo.a === true && buttonCombo.c === true && !isColliding(player, button3) && !isColliding(player, button2) && !isColliding(player, button1) && (buttonLock.c === false || buttonLock.b === false || buttonLock.a === false)) {
+                buttonLock.a = false;
+                buttonLock.b = false;
+                buttonLock.c = false;
+                buttonCombo.a = false;
+                buttonCombo.b = false;
+                buttonCombo.c = false;
+                button1.press = "https://i.ibb.co/9YhMM5T/Button2.png";
+                button2.press = "https://i.ibb.co/cyqQ87x/Button1.png";
+                button3.press = "https://i.ibb.co/mH38TwP/Button3.png";
+
+            } else if (buttonLock.c === true && buttonLock.b === true && buttonLock.a === true && door1.y > -170) {
+                wallMove = false;
+                door1Acc += 0.1;
+                door1.y -= door1Acc;
+                if (door1Acc > 6) {
+                    door1Acc = 6.1;
+                }
+                if (door1.y < -170) {
+                    wallHider1.y = -10000;
+                    door1.y = -10000;
+                }
+            }
+
+            if (wallMove) {
+                wall1.x += 0.4;
+                wallHider.w += 0.4;
+            }
+
+
+            //PLAYER CONTROLS
+
+            if (keyboard.w && !playerStop.up) {
+                world.y += playerSpeed;
+                playerMoving = true;
+            }
+            if (keyboard.s && !playerStop.down) {
+                world.y -= playerSpeed;
+                playerMoving = true;
+            }
+            if (keyboard.d && !playerStop.right) {
+                world.x -= playerSpeed;
+                swordDirection = 0;
+                playerMoving = true;
+            }
+            if (keyboard.a && !playerStop.left) {
+                world.x += playerSpeed;
+                swordDirection = -50;
+                playerMoving = true;
+            }
+
+            if (isHoldingSword) {
+                if (keyboard.space && swordDirection === -50 && !swordLock) {
+                    swordInHand.w = 40;
+                    swordInHand.h = 10;
+                    swordInHand.y = totalHeight / 2;
+                    swordLock = true;
+                    setTimeout(swordReset, 100)
+
+                } else if (keyboard.space && !swordLock) {
+                    swordInHand.w = 40;
+                    swordInHand.h = 10;
+                    swordInHand.y = totalHeight / 2;
+                    swordLock = true;
+                    setTimeout(swordReset, 100)
+                }
+
+                if (swordInHand.w === 40 && swordDirection === -50) {
+                    swordInHand.x = totalWidth / 2 - 10
+                }
+                if (swordInHand.w === 40 && swordDirection === 0) {
+                    swordInHand.x = totalWidth / 2 + 20
+                }
+                if (swordDirection === 0){
+                    swordInHand.graph = "https://i.ibb.co/b27QSwJ/Sword-Right.png"
+                } else{
+                    swordInHand.graph = "https://i.ibb.co/4dJGvBv/Sword-Left.png"
+                }
+            }
+
+
+
+            //WORLD DRAW
+
+            if (!hideRoom1) {
+                //wall/door
+                rectangle(wall1.x + world.x, wall1.y + world.y, wall1.w, wall1.h, "#00ff00")
+                rectangle(wall2.x + world.x, wall2.y + world.y, wall2.w, wall2.h, "#00ff00")
+                rectangle(wall3.x + world.x, wall3.y + world.y, wall3.w, wall3.h, "#00ff00")
+                rectangle(door1.x + world.x, door1.y + world.y, door1.w, door1.h, "#00ff00")
+                rectangle(wallHider.x + world.x, wallHider.y + world.y, wallHider.w, wallHider.h, "black")
+
+                //button
+                picture(button1.x + world.x, button1.y + world.y, button1.press, button1.w, button1.h)
+                picture(button2.x + world.x, button2.y + world.y, button2.press, button2.w, button2.h)
+                picture(button3.x + world.x, button3.y + world.y, button3.press, button3.w, button3.h)
+
+                //B walls
+                rectangle(wallB1.x + world.x, wallB1.y + world.y, wallB1.w, wallB1.h, "#00ff00")
+                rectangle(wallB2.x + world.x, wallB2.y + world.y, wallB2.w, wallB2.h, "#00ff00")
+                rectangle(wallB3.x + world.x, wallB3.y + world.y, wallB3.w, wallB3.h, "#00ff00")
+                rectangle(wallB4.x + world.x, wallB4.y + world.y, wallB4.w, wallB3.h, "#00ff00")
+
+                if (wallBreak1 === 0) {
+                    rectangle(wallB12.x + world.x, wallB12.y + world.y, wallB12.w, wallB12.h, "#00ff00")
+                } else if (wallBreak1 === 1) {
+                    picture(wallB12.x + world.x, wallB12.y + world.y, "https://i.ibb.co/s5Jn0B5/Hidden-Wall-Break.png", wallB12.w, wallB12.h) 
+                } else {
+                    wallB12.y = -10000;
+                    wallHider2.y = -10000;
+                }
+            }
+
+            if (hideRoom2) {
+                rectangle(doorTrigger.x + world.x, doorTrigger.y + world.y, doorTrigger.w, doorTrigger.h, "black")
+            }
+
+            rectangle(bossAttackHider1.x + world.x, bossAttackHider1.y + world.y, bossAttackHider1.w, bossAttackHider1.h, "black")
+            rectangle(bossAttackHider2.x + world.x, bossAttackHider2.y + world.y, bossAttackHider2.w, bossAttackHider2.h, "black")
+
+            rectangle(wallB22.x + world.x, wallB22.y + world.y, wallB22.w, wallB22.h, "#00ff00")
+            rectangle(wallB32.x + world.x, wallB32.y + world.y, wallB32.w, wallB32.h, "#00ff00")
+            rectangle(wallB42.x + world.x, wallB42.y + world.y, wallB42.w, wallB42.h, "#00ff00")
+            rectangle(wallHider1.x + world.x, wallHider1.y + world.y, wallHider1.w, wallHider1.h, "black")
+
+            rectangle(doorB1.x + world.x, doorB1.y + world.y, doorB1.w, doorB1.h, "#00ff00")
+            rectangle(wallHider3.x + world.x, wallHider3.y + world.y, wallHider3.w, wallHider3.h, "black")
+
+
+            if (isHoldingSword && doorTriggervar) {
+                moveDoorB1 = true;
+            }
+            if (moveDoorB1 && doorB1.y > 340) {
+                doorB1.y -= 10;
+            } else if (moveDoorB1) {
+                hideRoom1 = true;
+                hideRoom2 = false;
+                moveDoorBoss1 = true;
+            }
+
+            //B pots
+            picture(potList[0].x + world.x, potList[0].y + world.y, potList[0].graph, potList[0].w, potList[0].h);
+            picture(potList[1].x + world.x, potList[1].y + world.y, potList[1].graph, potList[0].w, potList[1].h);
+            picture(potList[2].x + world.x, potList[2].y + world.y, potList[2].graph, potList[0].w, potList[2].h);
+            picture(potList[3].x + world.x, potList[3].y + world.y, potList[3].graph, potList[0].w, potList[3].h);
+            picture(potList[4].x + world.x, potList[4].y + world.y, potList[4].graph, potList[0].w, potList[4].h);
+
+            //HIDDEN ROOM
+            rectangle(wallH1.x + world.x, wallH1.y + world.y, wallH1.w, wallH1.h, "#00ff00");
+            rectangle(wallH2.x + world.x, wallH2.y + world.y, wallH2.w, wallH2.h, "#00ff00");
+            rectangle(wallH3.x + world.x, wallH3.y + world.y, wallH3.w, wallH3.h, "#00ff00");
+            rectangle(wallH4.x + world.x, wallH4.y + world.y, wallH4.w, wallH4.h, "#00ff00");
+
+
+            picture(secretPickup.x + world.x, secretPickup.y + world.y, "https://i.ibb.co/gRZQGjc/Ketamine.png", secretPickup.w, secretPickup.h);
+
+            rectangle(wallHider2.x + world.x, wallHider2.y + world.y, wallHider2.w, wallHider2.h, "black");
+
+            //HIDE ROOM 1
+            if (hideRoom1) {
+                rectangle(rectangle(roomHider1.x + world.x, roomHider1.y + world.y, roomHider1.w, roomHider1.h, "black"))
+            }
+
+
+            //spear/sword pickup
+            picture(spearPickup.x + world.x, spearPickup.y + world.y, swordInHand.graph, spearPickup.w, spearPickup.h)
+
+
+            if (!hideRoom2) {
+
+                //TRIGGERS
+                if (damageable || bossDead) {
+                    sheildBashTrigger.y = 10000
+                } else {
+                    sheildBashTrigger.y = 340
+                }
+                rectangle(sheildBashTrigger.x + world.x, sheildBashTrigger.y + world.y, sheildBashTrigger.w, sheildBashTrigger.h, "black")
+                rectangle(sheildBashTrigger.x + world.x, sheildBashTrigger.y + world.y, 20, sheildBashTrigger.h, "#00ff00")
+
+                if (!wallBossBreakable) {
+                    rectangle(wallBoss1.x + world.x, wallBoss1.y + world.y, wallBoss1.w, wallBoss1.h, "#00ff00")
+                } else {
+                    picture(wallBoss1.x + world.x, wallBoss1.y + world.y, "https://i.ibb.co/tpKTMBG/Boss-Wall1.png", wallBoss1.w, wallBoss1.h)
+                }
+                rectangle(wallBoss2.x + world.x, wallBoss2.y + world.y, wallBoss2.w, wallBoss2.h, "#00ff00")
+                rectangle(wallBoss3.x + world.x, wallBoss3.y + world.y, wallBoss3.w, wallBoss3.h, "#00ff00")
+
+                if (!bossDead) {
+                    picture(bossBaseCharacter.x + world.x, bossBaseCharacter.y + world.y, "https://i.ibb.co/cCYyHYG/BossGuy.png", bossBaseCharacter.w, bossBaseCharacter.h)
+                } else {
+                    picture(bossBaseCharacter.x + world.x, bossBaseCharacter.y + world.y, "https://i.ibb.co/JydwS9r/Boss-Guy-Dead.png", bossBaseCharacter.w, bossBaseCharacter.h, "orange")
+                    hideRoom3 = false;
+                    wallBossBreakable = true;
+                }
+            }
+            if (moveDoorBoss1 && doorBoss1.y < 840) {
+                doorBoss1.y += 10;
+            }
+
+            rectangle(doorBoss1.x + world.x, doorBoss1.y + world.y, doorBoss1.w, doorBoss1.h, "#00ff00")
+            rectangle(wallHiderBoss1.x + world.x, wallHiderBoss1.y + world.y, wallHiderBoss1.w, wallHiderBoss1.h, "black")
+
+
+            if (!hideRoom3) {
+                rectangle(wallFin1.x + world.x, wallFin1.y + world.y, wallFin1.w, wallFin1.h, "#00ff00")
+                rectangle(wallFin2.x + world.x, wallFin2.y + world.y, wallFin2.w, wallFin2.h, "#00ff00")
+                rectangle(wallFin3.x + world.x, wallFin3.y + world.y, wallFin3.w, wallFin3.h, "#00ff00")
+
+                picture(finItem.x + world.x, finItem.y + world.y, "https://i.ibb.co/x7MCcgp/Cookie.png", finItem.w, finItem.h)
+            }
+
+            //ENTITY DRAW
+
+            //PLAYER/HUD DRAW
+
+            if (swordDirection === 0) {
+                playerType = "https://i.ibb.co/XDyqpwX/Player-Right-Still.png"
+            } else {
+                playerType = "https://i.ibb.co/CbvYCXS/Player-Left-Still.png"
+            }
+
+            if (playerMoving) {
+                if (swordDirection === -50) {
+                    if (playerMovingCounter > 5) {
+                        playerType = "https://i.ibb.co/dQXr3xY/Player-Moving-Left1.png"
+                        playerMovingCounter++;
+                    } else if (playerMovingCounter <= 5) {
+                        playerType = "https://i.ibb.co/4FDzLSQ/Player-Moving-Left2.png"
+                        playerMovingCounter++;
+                    }
+                    if (playerMovingCounter > 10){
+                        playerMovingCounter = 0;
+                    }
+                }
+                if (swordDirection === 0) {
+                    if (playerMovingCounter > 5) {
+                        playerType = "https://i.ibb.co/WF1TRsL/Player-Moving-Right2.png"
+                        playerMovingCounter++;
+                    } else if (playerMovingCounter <= 5) {
+                        playerType = "https://i.ibb.co/G9Z5Zyp/Player-Moving-RIght1.png"
+                        playerMovingCounter++;
+                    }
+                    if (playerMovingCounter > 10){
+                        playerMovingCounter = 0;
+                    }
+                }
+            }
+
+            picture(player.x, player.y, playerType, player.w, player.h)
+
+            if (isHoldingSword === true) {
+                picture(swordInHand.x + swordDirection, swordInHand.y,swordInHand.graph, swordInHand.w, swordInHand.h, "pink")
+            }
+
+            if (showhelp) {
+                text(totalWidth / 2 - 150, totalHeight / 2 - 50, 30, "SPACE to hit", "#00ff00")
+            }
+
+
+
+
+            //VAR RESET
+
+            playerStop.up = false;
+            playerStop.down = false;
+            playerStop.left = false;
+            playerStop.right = false;
+            playerMoving = false;
+
+            if (dead) {
+                deathScreen();
+            }
+
+            if (rollCreditsBitch) {
+                rectangle(0, 0, totalWidth, totalHeight, "black")
+                text(totalWidth / 2 - 120, totalHeight + creditsY, 100, "FIN", "#00ff00")
+                text(totalWidth / 2 - 260, totalHeight + 200 + creditsY, 50, "Made By Viggo", "#00ff00")
+                text(50, totalHeight + 1000 + creditsY, 10, "Why u still looking?", "#00ff00")
+                text(50, totalHeight + 2000 + creditsY, 10, "Seriously, there is nothing more...", "#00ff00")
+                text(50, totalHeight + 3000 + creditsY, 10, "OI!", "#00ff00")
+                text(50, totalHeight + 4000 + creditsY, 10, "...", "#00ff00")
+                text(50, totalHeight + 5000 + creditsY, 10, "Fine... Have another cookie.", "#00ff00")
+                picture(50, totalHeight + 5100 + creditsY, "https://i.ibb.co/x7MCcgp/Cookie.png", 40, 40)
+
+
+                creditsY -= 3;
+            }
+
+
+        }
+
+
+
+    </script>
+
+</body>
+
+</html>
